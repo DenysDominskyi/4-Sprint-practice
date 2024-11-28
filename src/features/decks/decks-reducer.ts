@@ -17,7 +17,7 @@ export const decksReducer = (state: DecksState = initialState, action: DecksActi
     case 'ADD_DECK': {
       return {
         ...state,
-        decks: [action.payload.newDeck, ...state.decks]
+        decks: [action.newDeck, ...state.decks]
       }
     }
     default:
@@ -36,13 +36,12 @@ export const getDecksAC = (items: DeckItem[]) => {
 export const addDeckAC = (newDeck: DeckItem) => {
   return {
     type: 'ADD_DECK',
-    payload: {newDeck}
+    newDeck
   } as const
 }
 
 //types
 
-type DecksActions = getDecks | addDeck
-
-type getDecks = ReturnType<typeof getDecksAC>
-type addDeck = ReturnType<typeof addDeckAC>
+type DecksActions = 
+| ReturnType<typeof getDecksAC> 
+| ReturnType<typeof addDeckAC>
