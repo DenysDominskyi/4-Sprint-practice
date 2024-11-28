@@ -9,6 +9,8 @@ const rootReducer = combineReducers({
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
+export type RootState = ReturnType<typeof store.getState>
+
 export type AppRootState = ReturnType<typeof rootReducer>
 
 export type AppDispatch = ThunkDispatch<AppRootState, unknown, AnyAction>

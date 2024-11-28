@@ -1,7 +1,8 @@
+import { DeckItem as DeckItemType } from '../../decks-api'
 import s from './DeckItem.module.css'
 
 type DeckProps = {
-  deck: any // todo: fix
+  deck: DeckItemType
 }
 
 const TEST_ACC_NAME = 'kukus'
