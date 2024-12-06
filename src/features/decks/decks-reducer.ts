@@ -1,7 +1,7 @@
-import { DeckItem } from "./decks-api"
+import { Deck } from './decks-api.ts'
 
 const initialState = {
-  decks: [] as DeckItem[],
+  decks: [] as Deck[],
   searchParams: {
     name: '',
   },
@@ -11,37 +11,52 @@ type DecksState = typeof initialState
 
 export const decksReducer = (state: DecksState = initialState, action: DecksActions): DecksState => {
   switch (action.type) {
-    case 'GET_DECKS': {
-      return {...state, decks: action.items}
-    }
-    case 'ADD_DECK': {
+    case 'DECKS/SET-DECKS':
       return {
         ...state,
-        decks: [action.newDeck, ...state.decks]
+        decks: action.decks,
       }
-    }
+    case 'DECKS/ADD-DECK':
+      return {
+        ...state,
+        decks: [action.deck, ...state.decks],
+      }
+    case 'DECKS/DELETE-DECK':
+      return {
+        ...state,
+        decks: state.decks.filter((deck) => deck.id !== action.id),
+      }
+    case 'DECKS/UPDATE-DECK':
+      return {
+        ...state,
+        decks: state.decks.map((deck) => (deck.id === action.updatedDeck.id ? action.updatedDeck : deck)),
+      }
     default:
       return state
   }
 }
 
-// Actions
-export const getDecksAC = (items: DeckItem[]) => {
-  return {
-    type: 'GET_DECKS',
-    items
-  } as const
-}
+type DecksActions =
+  | ReturnType<typeof setDecksAC>
+  | ReturnType<typeof addDeckAC>
+  | ReturnType<typeof deleteDeckAC>
+  | ReturnType<typeof updateDeckAC>
 
-export const addDeckAC = (newDeck: DeckItem) => {
-  return {
-    type: 'ADD_DECK',
-    newDeck
-  } as const
-}
+export const setDecksAC = (decks: Deck[]) => ({
+  type: 'DECKS/SET-DECKS' as const,
+  decks,
+})
+export const addDeckAC = (deck: Deck) => ({
+  type: 'DECKS/ADD-DECK' as const,
+  deck,
+})
 
-//types
+export const deleteDeckAC = (id: string) => ({
+  type: 'DECKS/DELETE-DECK' as const,
+  id,
+})
 
-type DecksActions = 
-| ReturnType<typeof getDecksAC> 
-| ReturnType<typeof addDeckAC>
+export const updateDeckAC = (updatedDeck: Deck) => ({
+  type: 'DECKS/UPDATE-DECK' as const,
+  updatedDeck,
+})

@@ -1,17 +1,17 @@
+import { useAppDispatch, useAppSelector } from '../../../app/store.ts'
+import { selectDecks } from '../decks-selectors.ts'
 import { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../app/store'
-import { selectDecks } from '../decks-selectors'
-import { fetchDecksTC } from '../decks-thunks'
+import { fetchDecksTC } from '../decks-thunks.ts'
 
 export const useFetchDecks = () => {
-  const decks = useAppSelector(selectDecks)
   const dispatch = useAppDispatch()
+  const decks = useAppSelector(selectDecks)
 
   useEffect(() => {
     dispatch(fetchDecksTC())
-  }, [])
+  }, [dispatch])
 
   return {
-    decks
+    decks,
   }
 }
