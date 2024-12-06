@@ -34,8 +34,25 @@ export const deleteDeckTC = (id: string) => async (dispatch: Dispatch) => {
   })
 }
 
+//case-1: ошибки бэкенда (на стороне бэкенда). Ошибку создает axios, e.responce.data
+//case-2: network error - axios создает объект ошибки, сообщение можно взять из поля e.message
+//case-3: синхронные ошибки - создаётся "нативная" JS-ошибка, имеет поле message
+
+export function errorHandler (err: any) {
+  if(err.response){
+    console.log(err.response.data.errorMessages[0].message)
+  } else if (err.message) {
+    console.log(err.message)
+  } else {
+    console.log(err)
+  }
+}
+
 export const updateDeckTC = (params: UpdateDeckParams) => async (dispatch: Dispatch) => {
-  return decksAPI.updateDeck(params).then((res) => {
+  try {
+    const res = await decksAPI.updateDeck(params)
     dispatch(updateDeckAC(res.data))
-  })
+  } catch (e: any) {
+    errorHandler(e)
+  }
 }
