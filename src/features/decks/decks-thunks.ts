@@ -22,9 +22,17 @@ export const addDeckTC = (name: string) => async (dispatch: Dispatch) => {
 }
 
 export const deleteDeckTC = (id: string) => async (dispatch: Dispatch) => {
-  return decksAPI.deleteDeck(id).then((res) => {
+  try {
+    throw new Error('Badaboom!')
+    const res = await decksAPI.deleteDeck(id)
     dispatch(deleteDeckAC(res.data.id))
-  })
+  } catch (e: any) {
+    errorHandler(dispatch, e)
+  } finally {
+    setTimeout(() => {
+      errorHandler(dispatch, null)
+    }, 0)
+  }
 }
 
 //case-1: ошибки бэкенда (на стороне бэкенда). Ошибку создает axios, e.responce.data
@@ -33,7 +41,7 @@ export const deleteDeckTC = (id: string) => async (dispatch: Dispatch) => {
 
 export const updateDeckTC = (params: UpdateDeckParams) => async (dispatch: Dispatch) => {
   try {
-    throw new Error('Badaboom!')
+    // throw new Error('Badaboom!')
     const res = await decksAPI.updateDeck(params)
     dispatch(updateDeckAC(res.data))
   } catch (e: any) {
@@ -42,5 +50,5 @@ export const updateDeckTC = (params: UpdateDeckParams) => async (dispatch: Dispa
     setTimeout(() => {
       errorHandler(dispatch, null)
     }, 0)
-}
+  }
 }
